@@ -1,0 +1,36 @@
+title: CPU Design Lab
+description: >-
+  Learning processor microarchitecture by building and measuring real cores —
+  from the Berkeley Sodor collection up through Rocket and BOOM.
+remote_theme: just-the-docs/just-the-docs
+
+url: https://eecsmap.github.io
+baseurl: /cpu-design-lab
+
+# just-the-docs
+search_enabled: true
+search:
+  heading_level: 3
+  previews: 3
+  tokenizer_separator: /[\s/]+/
+heading_anchors: true
+color_scheme: light
+
+aux_links:
+  "On GitHub":
+    - "https://github.com/eecsmap/cpu-design-lab"
+aux_links_new_tab: true
+
+back_to_top: true
+back_to_top_text: "Back to top"
+
+footer_content: >-
+  Personal lab notes. Measurements are reproducible — each one records the
+  Chipyard release and submodule commit it came from.
+
+plugins:
+  - jekyll-remote-theme
+  - jekyll-seo-tag
+
+exclude:
+  - reference-pdfs/

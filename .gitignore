@@ -1,0 +1,11 @@
+# build products of the custom tests (ELF + disassembly)
+custom-tests/mytest
+custom-tests/hazard_bench
+custom-tests/*.dump
+
+# jekyll local build
+docs/_site/
+docs/.jekyll-cache/
+docs/.jekyll-metadata
+.bundle/
+vendor/
