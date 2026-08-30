@@ -23,6 +23,7 @@ also supplies Rocket and BOOM for later.
 | Rebuild the environment on a new machine | [Setup]({{ site.baseurl }}/setup.html) |
 | Work through the labs in order | [Lab guide]({{ site.baseurl }}/guide/) |
 | Look up something we already figured out | [FAQ]({{ site.baseurl }}/faq/) |
+| Follow a full design-space exploration | [设计笔记]({{ site.baseurl }}/notes/) |
 | See measured numbers and how they were obtained | [Measurements](https://github.com/eecsmap/cpu-design-lab/tree/main/measurements) |
 
 ## Why these cores

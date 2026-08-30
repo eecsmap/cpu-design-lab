@@ -28,6 +28,7 @@ $LAB/tools/benchcycles.sh Sodor5StageConfig $LAB/custom-tests/hazard_bench
 | [`docs/setup.md`](docs/setup.md) | 环境搭建。换机器时只读这一篇就够 |
 | [`docs/guide/`](docs/guide/) | 实验指南 §1–§9,按顺序做 |
 | [`docs/faq/`](docs/faq/) | 问答,**按指南章节归类**而不是按时间 |
+| [`docs/notes/`](docs/notes/) | 设计笔记:完整的设计空间探索,保留推进顺序 |
 | [`measurements/`](measurements/) | 实测数据,每份都带 commit 和方法 |
 | [`tools/`](tools/) | `benchcycles.sh`(区间周期测量)、`cycles.sh` |
 | [`custom-tests/`](custom-tests/) | 能在核上跑的汇编测试程序 |
