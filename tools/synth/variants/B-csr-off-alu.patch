@@ -1,0 +1,48 @@
+diff --git a/src/main/scala/sodor/rv32_1stage/cpath.scala b/src/main/scala/sodor/rv32_1stage/cpath.scala
+index 86e6538..4c5a05b 100644
+--- a/src/main/scala/sodor/rv32_1stage/cpath.scala
++++ b/src/main/scala/sodor/rv32_1stage/cpath.scala
+@@ -93,12 +93,12 @@ class CtlPath(implicit val conf: SodorCoreParams) extends Module
+                   BLT     -> List(Y, BR_LT , OP1_X  , OP2_X   , ALU_X   ,  WB_X  , REN_0, MEN_0, M_X  , MT_X,  CSR.N),
+                   BLTU    -> List(Y, BR_LTU, OP1_X  , OP2_X   , ALU_X   ,  WB_X  , REN_0, MEN_0, M_X  , MT_X,  CSR.N),
+ 
+-                  CSRRWI  -> List(Y, BR_N  , OP1_IMZ, OP2_X   , ALU_COPY1, WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.W),
+-                  CSRRSI  -> List(Y, BR_N  , OP1_IMZ, OP2_X   , ALU_COPY1, WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.S),
+-                  CSRRCI  -> List(Y, BR_N  , OP1_IMZ, OP2_X   , ALU_COPY1, WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.C),
+-                  CSRRW   -> List(Y, BR_N  , OP1_RS1, OP2_X   , ALU_COPY1, WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.W),
+-                  CSRRS   -> List(Y, BR_N  , OP1_RS1, OP2_X   , ALU_COPY1, WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.S),
+-                  CSRRC   -> List(Y, BR_N  , OP1_RS1, OP2_X   , ALU_COPY1, WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.C),
++                  CSRRWI  -> List(Y, BR_N  , OP1_X  , OP2_X   , ALU_X    , WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.W),
++                  CSRRSI  -> List(Y, BR_N  , OP1_X  , OP2_X   , ALU_X    , WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.S),
++                  CSRRCI  -> List(Y, BR_N  , OP1_X  , OP2_X   , ALU_X    , WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.C),
++                  CSRRW   -> List(Y, BR_N  , OP1_X  , OP2_X   , ALU_X    , WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.W),
++                  CSRRS   -> List(Y, BR_N  , OP1_X  , OP2_X   , ALU_X    , WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.S),
++                  CSRRC   -> List(Y, BR_N  , OP1_X  , OP2_X   , ALU_X    , WB_CSR, REN_1, MEN_0, M_X ,  MT_X,  CSR.C),
+ 
+                   ECALL   -> List(Y, BR_N  , OP1_X  , OP2_X  ,  ALU_X    , WB_X  , REN_0, MEN_0, M_X  , MT_X,  CSR.I),
+                   MRET    -> List(Y, BR_N  , OP1_X  , OP2_X  ,  ALU_X    , WB_X  , REN_0, MEN_0, M_X  , MT_X,  CSR.I),
+diff --git a/src/main/scala/sodor/rv32_1stage/dpath.scala b/src/main/scala/sodor/rv32_1stage/dpath.scala
+index 69e8a47..5b901b4 100644
+--- a/src/main/scala/sodor/rv32_1stage/dpath.scala
++++ b/src/main/scala/sodor/rv32_1stage/dpath.scala
+@@ -153,8 +153,7 @@ class DatPath(implicit val p: Parameters, val conf: SodorCoreParams) extends Mod
+ 
+    val alu_op1 = MuxCase(0.U, Array(
+                (io.ctl.op1_sel === OP1_RS1) -> rs1_data,
+-               (io.ctl.op1_sel === OP1_IMU) -> imm_u_sext,
+-               (io.ctl.op1_sel === OP1_IMZ) -> imm_z
++               (io.ctl.op1_sel === OP1_IMU) -> imm_u_sext
+                )).asUInt
+ 
+    val alu_op2 = MuxCase(0.U, Array(
+@@ -196,7 +195,9 @@ class DatPath(implicit val p: Parameters, val conf: SodorCoreParams) extends Mod
+    csr.io.decode(0).inst := inst
+    csr.io.rw.addr   := inst(CSR_ADDR_MSB,CSR_ADDR_LSB)
+    csr.io.rw.cmd    := io.ctl.csr_cmd
+-   csr.io.rw.wdata  := alu_out
++   // Variant B: CSR write data no longer borrows the ALU. inst(14) is funct3(2),
++   // which is 1 for the immediate forms (CSRRWI/SI/CI) and 0 for the register forms.
++   csr.io.rw.wdata  := Mux(inst(14), imm_z, rs1_data)
+ 
+    csr.io.retire    := !(io.ctl.stall || io.ctl.exception)
+    csr.io.exception := io.ctl.exception

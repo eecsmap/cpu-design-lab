@@ -24,6 +24,7 @@ also supplies Rocket and BOOM for later.
 | Work through the labs in order | [Lab guide]({{ site.baseurl }}/guide/) |
 | Look up something we already figured out | [FAQ]({{ site.baseurl }}/faq/) |
 | Follow a full design-space exploration | [设计笔记]({{ site.baseurl }}/notes/) |
+| See a paper analysis get overturned by measurement | [Operand mux variants](https://github.com/eecsmap/cpu-design-lab/blob/main/measurements/2026-08-30-operand-mux-variants.md) |
 | See measured numbers and how they were obtained | [Measurements](https://github.com/eecsmap/cpu-design-lab/tree/main/measurements) |
 
 ## Why these cores

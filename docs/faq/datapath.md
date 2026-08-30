@@ -37,9 +37,17 @@ op1 的三路输入全部身兼两职:`rs1` 既是算术操作数又是 `CSRRW` 
 `AUIPC` 的加数又是 `LUI` 的源。而 op2 那边 `rs2` 和 CSR 完全不搭界(CSR 要的是 `rs1`),
 copy 走 op2 搭不到便车,还得把 `rs1` 额外挂一份到 op2 上。
 
-完整的代价核算和替代方案在设计笔记里。
+**但注意:这个"寄生"的解释是定性的,不要用它去估算代价。** 实测把 `imm_u` 和 `PC`
+对调、`LUI` 改用新增的 `ALU_COPY2` 之后,DatPath **少了 79 个 LUT(−6.5%)**、
+Fmax 高 2.5% —— 和"数 mux 输入个数"的推演正好相反。
 
-> 相关:设计笔记 [操作数 mux 的自由度,与 CSRRW 的约束]({{ site.baseurl }}/notes/01-operand-mux-and-copy.html)
+原因是那个模型有三处站不住:ALU 结果 mux 本来就是 16 项数组(多一个操作码接近免费);
+mux 规模由选择信号位宽而非输入个数决定;单路输入的代价取决于其中有多少位是常量或与
+其它输入共享(`imm_i_sext` 和 `imm_s_sext` 的高 20 位是同一根线,`imm_u_sext` 低 12 位
+恒零,而 `pc_reg` 32 位全任意)。
+
+> 相关:设计笔记 [操作数 mux 的自由度,与 CSRRW 的约束]({{ site.baseurl }}/notes/01-operand-mux-and-copy.html)、
+> [实测数据](https://github.com/eecsmap/cpu-design-lab/blob/main/measurements/2026-08-30-operand-mux-variants.md)
 
 ## 跳转目标为什么不用 ALU 算,要另外三个加法器?
 
